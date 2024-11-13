@@ -1,1 +1,88 @@
 /* Chrisa Changes*/
+/* Main Container for Product Layout */
+.product-single {
+    display: flex;
+    padding: 20px;
+    background-color: #f7f7f7;
+}
+
+/* Image Container */
+.product-gallery {
+    flex: 1;
+    text-align: center;
+    padding-right: 20px;
+}
+
+.product-gallery img {
+    max-width: 100%;
+    border-radius: 5px;
+}
+
+/* Product Information Container */
+.product-info {
+    flex: 1;
+    padding-left: 20px;
+}
+
+/* Product Title Styling */
+.product-title {
+    font-size: 2em;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+/* Price Styling */
+.product-price {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.initPrice {
+    color: #888;
+    text-decoration: line-through;
+    margin-left: 10px;
+}
+
+/* Product Description Styling */
+.product-desc__text {
+    margin-top: 20px;
+    font-size: 1em;
+    color: #555;
+}
+
+/* Quantity and Add to Cart Button */
+.product-cart-list {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.product-cart-qty input[type="number"] {
+    width: 60px;
+    padding: 5px;
+}
+
+.product-cart-qty .cart-icon {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+}
+
+.product-cart-qty .cart-icon:hover {
+    background-color: #444;
+}
+
+/* Share Section Styling */
+.share-section {
+    margin-top: 30px;
+    font-size: 0.9em;
+    color: #555;
+}
