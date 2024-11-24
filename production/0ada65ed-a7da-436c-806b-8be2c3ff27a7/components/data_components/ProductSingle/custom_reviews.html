@@ -1,0 +1,21 @@
+<div id="custom_reviews">
+  <h2>Customer Reviews</h2>
+  <p v-if="reviews.length === 0">No reviews yet. Be the first to review this product!</p>
+  <ul v-else>
+      <li v-for="review in reviews" :key="review.id">
+          <strong>{{ review.author }}</strong> - {{ review.rating }}/5
+          <p>{{ review.content }}</p>
+      </li>
+  </ul>
+
+  <!-- Add Review Form -->
+  <div class="add_review mt-4">
+      <h3>Add a Review</h3>
+      <form @submit.prevent="submitReview">
+          <input type="text" v-model="newReview.author" placeholder="Your name" required />
+          <input type="number" v-model="newReview.rating" min="1" max="5" placeholder="Rating (1-5)" required />
+          <textarea v-model="newReview.content" placeholder="Write your review" required></textarea>
+          <button type="submit">Submit Review</button>
+      </form>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+<div id="tab-section">
+  <!-- Tab Buttons -->
+  <div class="tab-buttons mt-4">
+    <button
+      @click="activeTab = 'description'"
+      :class="{ active: activeTab === 'description' }"
+    >
+      Description
+    </button>
+    <button
+      @click="activeTab = 'reviews'"
+      :class="{ active: activeTab === 'reviews' }"
+    >
+      Reviews
+    </button>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+    <!-- Render Description Component -->
+    <description
+      v-if="activeTab === 'description'"
+      :description="productDescription"
+    ></description>
+
+    <!-- Render Reviews Component -->
+    <reviews
+      v-if="activeTab === 'reviews'"
+      :reviews="reviews"
+      @add-review="addReview"
+    ></reviews>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+<section id="custom_tabs_section">
+  <!-- Tab Buttons -->
+  <div class="tab_buttons mt-4">
+      <button
+          @click="activeTab = 'description'"
+          :class="{ active: activeTab === 'description' }"
+      >
+          Description
+      </button>
+      <button
+          @click="activeTab = 'reviews'"
+          :class="{ active: activeTab === 'reviews' }"
+      >
+          Reviewss
+      </button>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="tab_content">
+      <!-- Description Component -->
+      <custom_description
+          v-if="activeTab === 'description'"
+          :product_description="productDescription"
+      ></custom_description>
+
+      <!-- Reviews Component -->
+      <custom_reviews
+          v-if="activeTab === 'reviews'"
+          :reviews="reviews"
+          @review_added="updateReviews"
+      ></custom_reviews>
+  </div>
+</section>

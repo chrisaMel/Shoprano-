@@ -7,6 +7,7 @@
 
     {{RequiredHeaders}}
 
+
     <link rel="stylesheet" href="{{Assets}}/css/lib/bootstrap.min.css?version={{Version}}">
     <link rel="stylesheet" href="{{Assets}}/css/lib/swiper-bundle.min.css?version={{Version}}">
     <link rel="stylesheet" href="{{Assets}}/css/lib/lightgallery.min.css?version={{Version}}">
@@ -84,6 +85,7 @@
     </div>
 
     {{RequiredTemplates}}
+    
 
     <script src="{{Assets}}/vue/axios.min.js?version={{Version}}"></script>
     <script src="{{Assets}}/vue/vue.global.prod.js?version={{Version}}"></script>
@@ -94,6 +96,9 @@
         const app = Vue.createApp({});
         app.use(myPlugin);
     </script>
+   
+   
+
     {{GlobalData}}
     <!-- Plugins -->
     <script type="text/javascript" src="{{Assets}}/vue/customization.js?version={{Version}}"></script>

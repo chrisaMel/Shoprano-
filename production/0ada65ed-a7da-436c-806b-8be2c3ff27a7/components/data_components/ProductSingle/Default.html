@@ -1,9 +1,10 @@
 <section :id="'comp-'+this.model.id" :class="this.model?.cssClass" class="product-single" :data-activeProduct="'prod-'+activeProduct">
     <div class="container tab-pane fade show active" id="general" role="tabpanel">
         <div class="row">
-            <!-- Product Images -->
+            <!-- Product Images Section -->
             <div class="col-lg-6">
                 <div class="product-gallery pe-4">
+                    <!-- Main Product Image Slider -->
                     <div class="swiper main-product-swiper gallery">
                         <div v-if="imageList && imageList.length > 0" class="swiper-wrapper">
                             <div v-for="image in imageList" class="swiper-slide text-center">
@@ -18,6 +19,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Thumbnail Slider -->
                     <div v-if="imageList && imageList.length > 1" class="swiper side-product-swiper px-2">
                         <div class="swiper-wrapper">
                             <div v-for="sideImage in imageList" class="swiper-slide text-center">
@@ -28,20 +30,15 @@
                 </div>
             </div>
 
-            <!-- Product Information -->
+            <!-- Product Information Section -->
             <div v-if="productData.productVariants.length > 0" class="col-lg-6">
                 <div class="product-info ps-lg-4 ms-lg-3">
-                    <h1 class="product-title">
-                        <span v-if="productData.productVariants[activeProduct].title">{{ productData.productVariants[activeProduct].title }}</span>
-                        <span v-else>{{ productData.title }}</span>
-                    </h1>
+                    <h1 class="product-title">{{ productData.productVariants[activeProduct]?.title || productData.title }}</h1>
+                    
+                    <!-- SKU -->
+                    <p v-if="productData.productVariants[activeProduct]?.sku" class="product-sku">SKU: {{ productData.productVariants[activeProduct].sku }}</p>
 
-                    <!-- Product SKU -->
-                    <p v-if="productData.productVariants[activeProduct].sku" class="product-sku">
-                        SKU: {{ productData.productVariants[activeProduct].sku }}
-                    </p>
-
-                    <!-- Product Availability -->
+                    <!-- Availability -->
                     <div v-if="productData.productVariants[activeProduct].additionalFeatures && !productData.productVariants[activeProduct].sellOutOfStock" class="product-availability">
                         <p class="title">Availability:</p>
                         <div class="value">
@@ -55,23 +52,19 @@
 
                     <!-- Product Short Description -->
                     <div v-if="productData.description" class="product-desc mt-4">
-                       
                         <div v-html="productData.description"></div>
                     </div>
 
-                    <!-- Product Price/Quantity and Add to Cart -->
+                    <!-- Price, Quantity, and Add to Cart Button -->
                     <div v-if="productData.showPrice || productData.productVariants[activeProduct].canOrder" class="product-price-qty">
                         <div class="product-price">
-                            <span v-if="productData.productVariants[activeProduct].retail" class="price">{{ calculateCurrency(productData.productVariants[activeProduct].retail.price) }}</span>
-                            <span v-else class="price">{{ calculateCurrency(productData.productVariants[activeProduct].price) }}</span>
+                            <span class="price">{{ calculateCurrency(productData.productVariants[activeProduct].retail?.price || productData.productVariants[activeProduct].price) }}</span>
                             <span v-if="this._hasDiscount(productData.productVariants[activeProduct])" class="initPrice">
                                 <del>{{ calculateCurrency(productData.productVariants[activeProduct].retail.initialPrice) }}</del>
                             </span>
                         </div>
-
-                        <!-- Quantity and Add to Cart -->
                         <div class="d-flex flex-row product-cart-list">
-                            <input type="number" min="1" v-model="quantity" class="form-control quantity-input" />
+                            <input type="number" min="0" v-model="quantity" class="form-control quantity-input" />
                             <button class="btn btn-secondary cart-icon" @click="addToCart($event)" :id="'but-'+productData.productVariants[activeProduct].id">
                                 Add to cart
                             </button>
@@ -79,12 +72,41 @@
                     </div>
                 </div>
             </div>
+
+        
+        <!-- Tab Buttons -->
+        <div class="tab-buttons mt-4">
+            <button @click="activeTab = 'description'" :class="{ active: activeTab === 'description' }">Description</button>
+            <button @click="activeTab = 'reviews'" :class="{ active: activeTab === 'reviews' }">Reviews</button>
         </div>
 
-        <!-- Product Description -->
-        <div v-if="productData.description" class="product-desc mt-4">
+        <!-- Product Description Section -->
+        <div v-if="productData.description && activeTab === 'description'" class="product-desc mt-4">
             <h2>Description</h2>
             <div v-html="productData.description"></div>
+        </div>
+
+        <!-- Reviews Section -->
+        <div v-if="activeTab === 'reviews' " class="product-reviews mt-4">
+            <h2>Customer Reviews</h2>
+            <p v-if="reviews.length === 0">No reviews yet. Be the first to review this product!</p>
+            <ul v-else>
+                <li v-for="review in reviews" :key="review.id">
+                    <strong>{{ review.author }}</strong> - {{ review.rating }}/5
+                    <p>{{ review.content }}</p>
+                </li>
+            </ul>
+
+            <!-- Add Review Form -->
+            <div class="add-review mt-4">
+                <h3>Add a Review</h3>
+                <form @submit.prevent="submitReview">
+                    <input type="text" v-model="newReview.author" placeholder="Your name" required />
+                    <input type="number" v-model="newReview.rating" min="1" max="5" placeholder="Rating (1-5)" required />
+                    <textarea v-model="newReview.content" placeholder="Write your review" required></textarea>
+                    <button type="submit">Submit Review</button>
+                </form>
+            </div>
         </div>
     </div>
 </section>
@@ -95,7 +117,7 @@
     background-color: #f7f7f7;
 }
 .product-title {
-    font-size: 20px;
+    font-size: 40px;
     font-weight: bold;
     margin-bottom: 10px;
 }
@@ -129,6 +151,58 @@
     border: none;
     padding: 10px 20px;
 }
+
+/* Tab Button Styling */
+.tab-buttons
+    {
+    display: flex;
+    border-bottom: 1px solid #633030;
+    margin-bottom: 16px;
+    
+    
+}
+
+.tab-buttons button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: normal;
+    color: #555;
+    cursor: pointer;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-bottom: none;
+    margin-right: 2px;
+    border-radius: 4px 4px 0 0;
+    transition: all 0.3s ease;
+}
+
+.tab-buttons button.active {
+    background: #ffffff;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 1px solid #ffffff;
+
+}
+
+.tab-buttons button:hover {
+    background: #f0f0f0;
+}
+
+/* Review List Styling */
+.product-reviews ul {
+    list-style-type: none;
+    background-color: #888;
+    padding: 0;
+}
+
+.product-reviews li {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+
+
+}
+
+
 </style>
 
     <div v-if="masterRelatedProducts.length > 0" class="master-related">
@@ -245,3 +319,4 @@
     </div>
 </div>
 
+  
